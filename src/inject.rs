@@ -40,6 +40,10 @@ pub fn inject(processName: &str,dllPath:&str){
        
         
         let loadLibAddr = GetProcAddress(kernel32, PCSTR("LoadLibraryA\0".as_ptr()));
+        match loadLibAddr{
+            Some(s)=>println!("[+] LoadLibA sucessful"),
+            None=>panic!("[!] LoadLibA failed"),
+        }
         println!("[+] got loadLibraryA at {:#x}",std::mem::transmute::<Option<unsafe extern "system" fn()->_>,usize>(loadLibAddr));
         let thread = match CreateRemoteThread(process,None,0,std::mem::transmute(loadLibAddr),Some(buffer),0,None){
             Ok(thread)=>thread,
